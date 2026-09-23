@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>Franquicias</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        /* Contenedor principal */
+        .contenedor-principal {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* Contenedores */
+        .contenedor {
+            background-color: white;
+            padding: 25px;
+            margin-bottom: 25px;
+
+            border-radius: 8px;
+
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .contenedor h2 {
+            margin-top: 0;
+        }
+
+        /* Formulario */
+        .formulario {
+            display: flex;
+            gap: 10px;
+        }
+
+        .formulario input {
+            flex: 1;
+
+            padding: 10px;
+
+            border: 1px solid #ccc;
+            border-radius: 5px;
+
+            font-size: 15px;
+        }
+
+        .formulario button {
+            padding: 10px 20px;
+
+            border: none;
+            border-radius: 5px;
+
+            background-color: #333;
+            color: white;
+
+            cursor: pointer;
+        }
+
+        .formulario button:hover {
+            background-color: #555;
+        }
+
+        /* Tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="contenedor-principal">
+
+        <h1>Administración de Franquicias</h1>
+
+
+        <!-- ============================= -->
+        <!-- CONTENEDOR FORMULARIO -->
+        <!-- ============================= -->
+
+        <div class="contenedor">
+
+            <h2>Crear franquicia</h2>
+
+            <form class="formulario" id="formFranquicia">
+
+                <input type="text" id="nombreFranquicia" placeholder="Nombre de la franquicia" required>
+
+                <button type="submit">
+                    Agregar
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- CONTENEDOR TABLA -->
+        <!-- ============================= -->
+
+        <div class="contenedor">
+
+            <h2>Franquicias registradas</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+<tbody>
+
+    <tr th:each="franquicia : ${franquicias}">
+
+        <td th:text="${franquicia.idFranquicia}">
+            1
+        </td>
+
+        <td>
+            <!-- Nombre normal -->
+            <span class="nombre-texto"
+                  th:text="${franquicia.nombreFranquicia}">
+                Franquicia ejemplo
+            </span>
+
+            <!-- Input oculto para editar -->
+            <input type="text"
+                   class="nombre-input"
+                   th:value="${franquicia.nombreFranquicia}"
+                   style="display: none;">
+        </td>
+
+        <td>
+
+            <button type="button"
+                    class="btn-editar"
+                    th:data-id="${franquicia.idFranquicia}"
+                    onclick="activarEdicion(this)">
+                Editar
+            </button>
+
+            <button type="button"
+                    class="btn-guardar"
+                    th:data-id="${franquicia.idFranquicia}"
+                    onclick="guardarEdicion(this)"
+                    style="display: none;">
+                Guardar
+            </button>
+
+            <button type="button"
+                    class="btn-cancelar"
+                    onclick="cancelarEdicion(this)"
+                    style="display: none;">
+                Cancelar
+            </button>
+
+            <button type="button"
+                    class="btn-eliminar"
+                    th:onclick="'eliminarFranquicia('
+                        + ${franquicia.idFranquicia} + ')'">
+                Eliminar
+            </button>
+
+        </td>
+
+    </tr>
+
+</tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <script th:src="@{/Franquicias/Js/Franquicias.js}"></script>
+</body>
+
+</html>
