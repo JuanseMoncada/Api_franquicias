@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sucursales</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .contenedor-principal {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .contenedor {
+            background-color: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .contenedor h2 {
+            margin-top: 0;
+        }
+
+        .formulario {
+            display: flex;
+            gap: 10px;
+        }
+
+        .formulario input,
+        .formulario select {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        .formulario button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+        }
+
+        .formulario button:hover {
+            background-color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor-principal">
+
+    <h1>Administración de Sucursales</h1>
+
+    <div class="contenedor">
+        <h2>Crear sucursal</h2>
+
+        <form class="formulario" id="formSucursal">
+
+            <input
+                    type="text"
+                    id="nombreSucursal"
+                    placeholder="Nombre de la sucursal"
+                    required>
+
+            <select id="franquiciaId" required>
+                <option value="">Seleccione una franquicia</option>
+
+                <option
+                        th:each="franquicia : ${franquicias}"
+                        th:value="${franquicia.idFranquicia}"
+                        th:text="${franquicia.nombreFranquicia}">
+                </option>
+            </select>
+
+            <button type="submit">Agregar</button>
+
+        </form>
+    </div>
+
+    <div class="contenedor">
+        <h2>Sucursales registradas</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>ID Franquicia</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr th:each="sucursal : ${sucursales}">
+
+                <td th:text="${sucursal.idSucursal}"></td>
+
+                <td>
+                    <span
+                            class="nombre-texto"
+                            th:text="${sucursal.nombreSucursal}">
+                    </span>
+
+                    <input
+                            type="text"
+                            class="nombre-input"
+                            th:value="${sucursal.nombreSucursal}"
+                            style="display: none;">
+                </td>
+
+                <td th:text="${sucursal.idFranquicia}"></td>
+
+                <td>
+                    <button
+                            type="button"
+                            class="btn-editar"
+                            th:data-id="${sucursal.idSucursal}"
+                            onclick="activarEdicion(this)">
+                        Editar
+                    </button>
+
+                    <button
+                            type="button"
+                            class="btn-guardar"
+                            th:data-id="${sucursal.idSucursal}"
+                            onclick="guardarEdicion(this)"
+                            style="display: none;">
+                        Guardar
+                    </button>
+
+                    <button
+                            type="button"
+                            class="btn-cancelar"
+                            onclick="cancelarEdicion(this)"
+                            style="display: none;">
+                        Cancelar
+                    </button>
+
+                    <button
+                            type="button"
+                            class="btn-eliminar"
+                            th:onclick="'eliminarSucursal(' + ${sucursal.idSucursal} + ')'">
+                        Eliminar
+                    </button>
+                </td>
+
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script th:src="@{/Sucursal/Sucursales.js}"></script>
+
+</body>
+</html>
+```
