@@ -114,6 +114,112 @@ mvn -version
 
 ---
 
+## Ejecución con Docker
+
+La aplicación también puede ejecutarse mediante Docker.
+
+El proyecto utiliza un **Dockerfile multi-stage**:
+
+- Una primera etapa utiliza Java 21 JDK para compilar la aplicación con Maven.
+- Una segunda etapa utiliza Java 21 JRE únicamente para ejecutar el archivo `.jar` generado.
+- Esto permite reducir el tamaño de la imagen final y evita incluir herramientas de compilación innecesarias.
+
+### Requisitos
+
+Para ejecutar la aplicación mediante Docker es necesario tener instalado:
+
+- Docker Desktop
+- SQL Server ejecutándose localmente
+- La base de datos `Accenture_Prueba_Tec_Franquicias` creada mediante el script incluido en la carpeta `database/`
+
+### Construir la imagen
+
+Desde la raíz del proyecto ejecutar:
+
+```bash
+docker build -t franquicias-api .
+```
+
+Para verificar que la imagen fue creada:
+
+```bash
+docker images
+```
+
+### Ejecutar el contenedor
+
+La aplicación se conecta al SQL Server instalado en la máquina host mediante:
+
+```text
+host.docker.internal
+```
+
+Ejecutar el contenedor proporcionando las credenciales correspondientes de SQL Server:
+
+```bash
+docker run --name franquicias-container -p 8080:8080 \
+  -e "SPRING_DATASOURCE_URL=jdbc:sqlserver://host.docker.internal:1433;databaseName=Accenture_Prueba_Tec_Franquicias;encrypt=false;trustServerCertificate=true" \
+  -e "SPRING_DATASOURCE_USERNAME=TU_USUARIO" \
+  -e "SPRING_DATASOURCE_PASSWORD=TU_PASSWORD" \
+  franquicias-api
+```
+
+> En Windows CMD, el comando anterior también puede ejecutarse en una sola línea.
+
+Una vez iniciada la aplicación estará disponible en:
+
+```text
+http://localhost:8080
+```
+
+Vistas disponibles:
+
+```text
+http://localhost:8080/franquicias
+http://localhost:8080/sucursales
+http://localhost:8080/productos
+```
+
+### Detener el contenedor
+
+Si el contenedor se está ejecutando en primer plano se puede detener con:
+
+```text
+Ctrl + C
+```
+
+También puede detenerse mediante:
+
+```bash
+docker stop franquicias-container
+```
+
+Para eliminar el contenedor:
+
+```bash
+docker rm franquicias-container
+```
+
+### Consideración sobre la base de datos
+
+Cuando la aplicación se ejecuta directamente desde el entorno local, SQL Server se encuentra disponible mediante:
+
+```text
+localhost:1433
+```
+
+Sin embargo, dentro del contenedor Docker, `localhost` hace referencia al propio contenedor.
+
+Por esta razón, para acceder al SQL Server instalado en la máquina host se utiliza:
+
+```text
+host.docker.internal:1433
+```
+
+Las credenciales de SQL Server no se almacenan dentro del Dockerfile ni se publican en el repositorio. Deben proporcionarse mediante variables de entorno al ejecutar el contenedor.
+
+---
+
 ### Microsoft SQL Server
 
 Es necesario disponer de una instancia local de **Microsoft SQL Server**.
