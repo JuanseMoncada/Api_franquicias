@@ -143,42 +143,28 @@ async function guardarEdicion(boton) {
     }
 }
 
-async function guardarEdicion(boton) {
+function cancelarEdicion(boton) {
 
     const fila = boton.closest("tr");
 
-    const id = boton.dataset.id;
-
+    const texto = fila.querySelector(".nombre-texto");
     const input = fila.querySelector(".nombre-input");
 
-    const nuevoNombre = input.value.trim();
+    const btnEditar = fila.querySelector(".btn-editar");
+    const btnGuardar = fila.querySelector(".btn-guardar");
+    const btnCancelar = fila.querySelector(".btn-cancelar");
 
-    if (nuevoNombre === "") {
-        alert("El nombre no puede estar vacío");
-        return;
-    }
+    // Volvemos a colocar el nombre original
+    input.value = texto.textContent.trim();
 
-    const franquicia = {
-        nombreFranquicia: nuevoNombre
-    };
+    // Mostramos nuevamente el texto
+    texto.style.display = "inline";
 
-    const response = await fetch(
-        "/franquicias/" + id,
-        {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(franquicia)
-        }
-    );
+    // Ocultamos el input
+    input.style.display = "none";
 
-    if (response.ok) {
-
-        window.location.reload();
-
-    } else {
-
-        alert("No se pudo actualizar la franquicia");
-    }
+    // Restauramos los botones
+    btnEditar.style.display = "inline-block";
+    btnGuardar.style.display = "none";
+    btnCancelar.style.display = "none";
 }

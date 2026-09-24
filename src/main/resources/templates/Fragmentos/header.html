@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <header th:fragment="header">
+        <nav>
+            <a th:href="@{/franquicias}">Franquicias</a>
+            <a th:href="@{/sucursales}">Sucursales</a>
+            <a th:href="@{/productos}">Productos</a>
+
+        </nav>
+
+        <style>
+            header {
+                background-color: #333;
+                padding: 15px;
+                text-align: center;
+            }
+
+            header a {
+                color: white;
+                text-decoration: none;
+                margin: 0 20px;
+                font-family: Arial, sans-serif;
+            }
+
+            header a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </header>
+
+</body>
+
+</html>

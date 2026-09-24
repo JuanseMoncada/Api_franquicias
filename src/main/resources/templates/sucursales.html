@@ -67,6 +67,20 @@
             background-color: #555;
         }
 
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -92,115 +106,96 @@
 </head>
 
 <body>
+    <div th:replace="~{Fragmentos/header :: header}"></div>
 
-<div class="contenedor-principal">
+    <div class="contenedor-principal">
 
-    <h1>Administración de Sucursales</h1>
+        <h1>Administración de Sucursales</h1>
 
-    <div class="contenedor">
-        <h2>Crear sucursal</h2>
+        <div class="contenedor">
+            <h2>Crear sucursal</h2>
 
-        <form class="formulario" id="formSucursal">
+            <form class="formulario" id="formSucursal">
 
-            <input
-                    type="text"
-                    id="nombreSucursal"
-                    placeholder="Nombre de la sucursal"
-                    required>
+                <input type="text" id="nombreSucursal" placeholder="Nombre de la sucursal" required>
 
-            <select id="franquiciaId" required>
-                <option value="">Seleccione una franquicia</option>
+                <select id="franquiciaId" required>
+                    <option value="">Seleccione una franquicia</option>
 
-                <option
-                        th:each="franquicia : ${franquicias}"
-                        th:value="${franquicia.idFranquicia}"
+                    <option th:each="franquicia : ${franquicias}" th:value="${franquicia.idFranquicia}"
                         th:text="${franquicia.nombreFranquicia}">
-                </option>
-            </select>
+                    </option>
+                </select>
 
-            <button type="submit">Agregar</button>
+                <button type="submit">Agregar</button>
 
-        </form>
+            </form>
+        </div>
+
+        <div class="contenedor">
+            <h2>Sucursales registradas</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>ID Franquicia</th>
+                        <th>Nombre Franquicia</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr th:each="sucursal : ${sucursales}">
+
+                        <td th:text="${sucursal.idSucursal}"></td>
+
+                        <td>
+                            <span class="nombre-texto" th:text="${sucursal.nombreSucursal}">
+                            </span>
+
+                            <input type="text" class="nombre-input" th:value="${sucursal.nombreSucursal}"
+                                style="display: none;">
+                        </td>
+
+                        <td th:text="${sucursal.idFranquicia}"></td>
+
+                        <td th:text="${sucursal.nombreFranquicia}"></td>
+
+                        <td>
+                            <button type="button" class="btn-editar" th:data-id="${sucursal.idSucursal}"
+                                onclick="activarEdicion(this)">
+                                Editar
+                            </button>
+
+                            <button type="button" class="btn-guardar" th:data-id="${sucursal.idSucursal}"
+                                onclick="guardarEdicion(this)" style="display: none;">
+                                Guardar
+                            </button>
+
+                            <button type="button" class="btn-cancelar" onclick="cancelarEdicion(this)"
+                                style="display: none;">
+                                Cancelar
+                            </button>
+
+                            <button type="button" class="btn-eliminar"
+                                th:onclick="'eliminarSucursal(' + ${sucursal.idSucursal} + ')'">
+                                Eliminar
+                            </button>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+
     </div>
 
-    <div class="contenedor">
-        <h2>Sucursales registradas</h2>
-
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>ID Franquicia</th>
-                <th>Acciones</th>
-            </tr>
-            </thead>
-
-            <tbody>
-
-            <tr th:each="sucursal : ${sucursales}">
-
-                <td th:text="${sucursal.idSucursal}"></td>
-
-                <td>
-                    <span
-                            class="nombre-texto"
-                            th:text="${sucursal.nombreSucursal}">
-                    </span>
-
-                    <input
-                            type="text"
-                            class="nombre-input"
-                            th:value="${sucursal.nombreSucursal}"
-                            style="display: none;">
-                </td>
-
-                <td th:text="${sucursal.idFranquicia}"></td>
-
-                <td>
-                    <button
-                            type="button"
-                            class="btn-editar"
-                            th:data-id="${sucursal.idSucursal}"
-                            onclick="activarEdicion(this)">
-                        Editar
-                    </button>
-
-                    <button
-                            type="button"
-                            class="btn-guardar"
-                            th:data-id="${sucursal.idSucursal}"
-                            onclick="guardarEdicion(this)"
-                            style="display: none;">
-                        Guardar
-                    </button>
-
-                    <button
-                            type="button"
-                            class="btn-cancelar"
-                            onclick="cancelarEdicion(this)"
-                            style="display: none;">
-                        Cancelar
-                    </button>
-
-                    <button
-                            type="button"
-                            class="btn-eliminar"
-                            th:onclick="'eliminarSucursal(' + ${sucursal.idSucursal} + ')'">
-                        Eliminar
-                    </button>
-                </td>
-
-            </tr>
-
-            </tbody>
-        </table>
-    </div>
-
-</div>
-
-<script th:src="@{/Sucursal/Sucursales.js}"></script>
+    <script th:src="@{/Sucursal/Sucursales.js}"></script>
 
 </body>
+
 </html>
-```
